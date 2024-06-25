@@ -1,7 +1,6 @@
 #include "colors.h"
 #include "space.h"
 #include "strutil.h"
-#include <ctype.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,93 +8,28 @@
 #include <time.h>
 #include <twx/twx.h>
 
-bool parse_color_string(char *color_str, TwxARGB *color) {
-  char *hyphen = strchr(color_str, '-');
-  if (hyphen == NULL) {
-    return NULL;
-  }
+typedef void (*ClassParserFunc)(const char *class_name, struct TwxStyle *style);
 
-  const size_t split_i = (size_t)(hyphen - color_str);
-  char *color_name = substr(color_str, 0, split_i);
-  if (color_name == NULL) {
-    return false;
-  }
+struct ClassParserEntry {
+  char *class_prefix;
+  ClassParserFunc parse;
+};
 
-  char *color_num_str = substr(color_str, split_i, strlen(color_str));
-  if (color_num_str == NULL) {
-    return false;
-  }
+static const struct ClassParserEntry parser_funcs[9] = {
+    {"bg-", &parse_bg},
 
-  int color_num = atoi(color_num_str);
-  if (color_num == 0) {
-    return 0;
-  }
+    {"p-", &parse_p},   {"pt-", &parse_pt},
+    {"pb-", &parse_pb}, {"pr-", &parse_pr},
 
-  return get_tw_color(color_name, color_num, color);
-}
-
-bool parse_space_value(char *space_value_str, double *space) {
-  if (space_value_str == NULL || space == NULL) {
-    return false;
-  }
-
-  const size_t len = strlen(space_value_str);
-  for (size_t i = 0; i < len; ++i) {
-    if (!isdigit(space_value_str[i])) {
-      return false;
-    }
-  }
-
-  char *end;
-  const double value = strtod(space_value_str, &end);
-  if ((end - space_value_str + 1) != len) {
-    return false;
-  }
-
-  if (!is_valid_space_value(value)) {
-    return false;
-  }
-
-  *space = value;
-
-  return true;
-}
+    {"m-", &parse_m},   {"mt-", &parse_mt},
+    {"mb-", &parse_mb}, {"mr-", &parse_mr},
+};
 
 void parse_class(char *class, struct TwxStyle *style) {
-  if (str_starts_with(class, "bg-")) {
-    parse_color_string(class + 3, &style->background_color);
-  } else if (str_starts_with(class, "p-")) {
-    double padding;
-    const bool ok = parse_space_value(class + 2, &padding);
-    if (ok) {
-      style->padding.top = padding;
-      style->padding.bottom = padding;
-      style->padding.left = padding;
-      style->padding.right = padding;
-    }
-  } else if (str_starts_with(class, "pt-")) {
-    double padding;
-    const bool ok = parse_space_value(class + 2, &padding);
-    if (ok) {
-      style->padding.top = padding;
-    }
-  } else if (str_starts_with(class, "pb-")) {
-    double padding;
-    const bool ok = parse_space_value(class + 2, &padding);
-    if (ok) {
-      style->padding.bottom = padding;
-    }
-  } else if (str_starts_with(class, "pl-")) {
-    double padding;
-    const bool ok = parse_space_value(class + 2, &padding);
-    if (ok) {
-      style->padding.left = padding;
-    }
-  } else if (str_starts_with(class, "pr-")) {
-    double padding;
-    const bool ok = parse_space_value(class + 2, &padding);
-    if (ok) {
-      style->padding.right = padding;
+  for (size_t i = 0; i < 9; ++i) {
+    if (str_starts_with(class, parser_funcs[i].class_prefix)) {
+      parser_funcs[i].parse(class, style);
+      return;
     }
   }
 }

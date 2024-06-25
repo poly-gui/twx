@@ -3,6 +3,7 @@
 #include "twx/twx.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 #define COLOR_NAME_SLATE 274523902
 #define COLOR_NAME_GRAY 2090302584
@@ -231,4 +232,33 @@ bool get_tw_color(const char *color_name, const int color_num, TwxARGB *color) {
   }
 
   return color_by_num(color_table, color_num, color);
+}
+
+bool parse_color_string(const char *color_str, TwxARGB *color) {
+  char *hyphen = strchr(color_str, '-');
+  if (hyphen == NULL) {
+    return NULL;
+  }
+
+  const size_t split_i = (size_t)(hyphen - color_str);
+  char *color_name = substr(color_str, 0, split_i);
+  if (color_name == NULL) {
+    return false;
+  }
+
+  char *color_num_str = substr(color_str, split_i, strlen(color_str));
+  if (color_num_str == NULL) {
+    return false;
+  }
+
+  int color_num = atoi(color_num_str);
+  if (color_num == 0) {
+    return 0;
+  }
+
+  return get_tw_color(color_name, color_num, color);
+}
+
+void parse_bg(const char *class_name, struct TwxStyle *style) {
+  parse_color_string(class_name + 3, &style->background_color);
 }
