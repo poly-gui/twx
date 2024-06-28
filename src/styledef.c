@@ -13,8 +13,12 @@ void twx_style_initialize(struct twx_style *style) {
   style->margin.bottom = TWX_VALUE_NOT_SET;
   style->margin.right = TWX_VALUE_NOT_SET;
 
+  style->border.top.width = TWX_VALUE_NOT_SET;
   style->border.left.width = TWX_VALUE_NOT_SET;
   style->border.bottom.width = TWX_VALUE_NOT_SET;
-  style->border.left.width = TWX_VALUE_NOT_SET;
   style->border.right.width = TWX_VALUE_NOT_SET;
+  style->border.top.color = TWX_VALUE_NOT_SET;
+  style->border.left.color = TWX_VALUE_NOT_SET;
+  style->border.bottom.color = TWX_VALUE_NOT_SET;
+  style->border.right.color = TWX_VALUE_NOT_SET;
 }

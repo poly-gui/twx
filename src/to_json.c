@@ -7,8 +7,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#define JSON_VALUE_OR_NULL(type, value)                                        \
-  value != TWX_VALUE_NOT_SET ? json_object_new_##type(value) : NULL
+#define ADD_COLOR_VALUE_IF_SET(json, key, value)                               \
+  if (value >= 0) {                                                            \
+    char str[10];                                                              \
+    twx_argb_to_hex_str(value, str);                                           \
+    json_object_object_add(json, key, json_object_new_string(str));            \
+  }
+
+#define ADD_KEY_IF_VALUE_SET(json, type, key, value)                           \
+  if (value != TWX_VALUE_NOT_SET) {                                            \
+    json_object_object_add(json, key, json_object_new_##type(value));          \
+  }
 
 void twx_argb_to_hex_str(twx_argb argb, char *str) {
   uint32_t value = argb & 0xFFFFFFFF;
@@ -24,33 +33,52 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
     return;
   }
 
-  if (style->background_color >= 0) {
+  ADD_COLOR_VALUE_IF_SET(json, "backgroundColor", style->background_color);
 
-    char bg_color_str[10];
-    twx_argb_to_hex_str(style->background_color, bg_color_str);
-    json_object_object_add(json, "backgroundColor",
-                           json_object_new_string(bg_color_str));
-  } else {
-    json_object_object_add(json, "backgroundColor", NULL);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingTop", style->padding.top);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingLeft", style->padding.left);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingBottom", style->padding.bottom);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingRight", style->padding.right);
+
+  ADD_KEY_IF_VALUE_SET(json, double, "marginTop", style->margin.top);
+  ADD_KEY_IF_VALUE_SET(json, double, "marginLeft", style->margin.left);
+  ADD_KEY_IF_VALUE_SET(json, double, "marginBottom", style->margin.bottom);
+  ADD_KEY_IF_VALUE_SET(json, double, "marginRight", style->margin.right);
+
+  if (style->border.top.width != TWX_VALUE_NOT_SET) {
+    json_object *border_obj = json_object_new_object();
+    json_object_object_add(border_obj, "width",
+                           json_object_new_double(style->border.top.width));
+    ADD_COLOR_VALUE_IF_SET(border_obj, "color", style->border.top.color);
+    json_object_object_add(json, "borderTop", border_obj);
   }
 
-  json_object_object_add(json, "paddingTop",
-                         JSON_VALUE_OR_NULL(double, style->padding.top));
-  json_object_object_add(json, "paddingLeft",
-                         JSON_VALUE_OR_NULL(double, style->padding.left));
-  json_object_object_add(json, "paddingBottom",
-                         JSON_VALUE_OR_NULL(double, style->padding.bottom));
-  json_object_object_add(json, "paddingRight",
-                         JSON_VALUE_OR_NULL(double, style->padding.right));
+  if (style->border.left.width != TWX_VALUE_NOT_SET) {
+    json_object *border_obj = json_object_new_object();
+    json_object_object_add(border_obj, "width",
+                           json_object_new_double(style->border.left.width));
+    ADD_COLOR_VALUE_IF_SET(border_obj, "color", style->border.left.color);
 
-  json_object_object_add(json, "marginTop",
-                         JSON_VALUE_OR_NULL(double, style->margin.top));
-  json_object_object_add(json, "marginLeft",
-                         JSON_VALUE_OR_NULL(double, style->margin.left));
-  json_object_object_add(json, "marginBottom",
-                         JSON_VALUE_OR_NULL(double, style->margin.bottom));
-  json_object_object_add(json, "marginRight",
-                         JSON_VALUE_OR_NULL(double, style->margin.right));
+    json_object_object_add(json, "borderLeft", border_obj);
+  }
+
+  if (style->border.bottom.width != TWX_VALUE_NOT_SET) {
+    json_object *border_obj = json_object_new_object();
+    json_object_object_add(border_obj, "width",
+                           json_object_new_double(style->border.bottom.width));
+    ADD_COLOR_VALUE_IF_SET(border_obj, "color", style->border.bottom.color);
+
+    json_object_object_add(json, "borderBottom", border_obj);
+  }
+
+  if (style->border.right.width != TWX_VALUE_NOT_SET) {
+    json_object *border_obj = json_object_new_object();
+    json_object_object_add(border_obj, "width",
+                           json_object_new_double(style->border.right.width));
+    ADD_COLOR_VALUE_IF_SET(border_obj, "color", style->border.right.color);
+
+    json_object_object_add(json, "borderRight", border_obj);
+  }
 }
 
 const char *styles_to_json(const struct twx_style *base_style,

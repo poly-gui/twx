@@ -2,40 +2,43 @@
 #include "colors.h"
 #include "space.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
 #define BORDER_TOP 1
 #define BORDER_LEFT 2
 #define BORDER_BOTTOM 4
 #define BORDER_RIGHT 8
+#define BORDER_ALL 15
 
 void apply_border_width(uint8_t sides, double width, struct twx_style *style) {
+  printf("asdkljjsdaklkds %d\n", sides & BORDER_LEFT);
   if ((sides & BORDER_TOP) == 1) {
     style->border.top.width = width;
   }
-  if ((sides & BORDER_LEFT) == 1) {
+  if ((sides & BORDER_LEFT) == BORDER_LEFT) {
     style->border.left.width = width;
   }
-  if ((sides & BORDER_BOTTOM) == 1) {
+  if ((sides & BORDER_BOTTOM) == BORDER_BOTTOM) {
     style->border.bottom.width = width;
   }
-  if ((sides & BORDER_RIGHT) == 1) {
+  if ((sides & BORDER_RIGHT) == BORDER_RIGHT) {
     style->border.right.width = width;
   }
 }
 
 void apply_border_color(uint8_t sides, twx_argb color,
                         struct twx_style *style) {
-  if ((sides & BORDER_TOP) == 1) {
+  if ((sides & BORDER_TOP) == BORDER_TOP) {
     style->border.top.color = color;
   }
-  if ((sides & BORDER_LEFT) == 1) {
+  if ((sides & BORDER_LEFT) == BORDER_LEFT) {
     style->border.left.color = color;
   }
-  if ((sides & BORDER_BOTTOM) == 1) {
+  if ((sides & BORDER_BOTTOM) == BORDER_BOTTOM) {
     style->border.bottom.color = color;
   }
-  if ((sides & BORDER_RIGHT) == 1) {
+  if ((sides & BORDER_RIGHT) == BORDER_RIGHT) {
     style->border.right.color = color;
   }
 }
@@ -46,7 +49,8 @@ void parse_border(const char *class_name, const char *matched_prefix,
 
   uint8_t sides = 0;
   if (strncmp("border-", matched_prefix, 7) == 0) {
-    sides = 15;
+    sides = BORDER_ALL;
+    printf("sides %u\n", sides);
   } else if (strncmp("border-t-", matched_prefix, 9) == 0) {
     sides = BORDER_TOP;
   } else if (strncmp("border-l-", matched_prefix, 9) == 0) {

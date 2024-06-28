@@ -59,6 +59,8 @@ const char *twx_parse_to_json(char *class_str) {
   struct twx_style base_style;
   twx_style_initialize(&base_style);
 
+  printf("after initialize border top %f\n", base_style.border.top.width);
+
   struct twx_style_with_modifier *modifier_styles = NULL;
 
   char *class = strsep(&class_str, delim);

@@ -16,7 +16,7 @@ struct twx_space {
   double left;
 };
 
-struct TwxBorder {
+struct twx_border {
   double width;
   twx_argb color;
 };
@@ -25,10 +25,10 @@ struct twx_style {
   struct twx_space padding;
   struct twx_space margin;
   struct {
-    struct TwxBorder top;
-    struct TwxBorder bottom;
-    struct TwxBorder left;
-    struct TwxBorder right;
+    struct twx_border top;
+    struct twx_border bottom;
+    struct twx_border left;
+    struct twx_border right;
   } border;
   twx_argb background_color;
 };
