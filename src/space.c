@@ -1,4 +1,5 @@
 #include "space.h"
+#include "twx/twx.h"
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,88 +45,64 @@ bool parse_space_value(const char *space_value_str, double *space) {
   return true;
 }
 
-void parse_p(const char *class_name, struct TwxStyle *style) {
+void parse_padding(const char *class_name, const char *matched_prefix,
+                   struct twx_style *style) {
   double padding;
-  const bool ok = parse_space_value(class_name + 2, &padding);
-  if (ok) {
+  const bool ok =
+      parse_space_value(class_name + strlen(matched_prefix), &padding);
+  if (!ok) {
+    return;
+  }
+
+  if (strncmp("p-", matched_prefix, 2)) {
     style->padding.top = padding;
     style->padding.bottom = padding;
     style->padding.left = padding;
     style->padding.right = padding;
-  }
-}
-
-void parse_pt(const char *class_name, struct TwxStyle *style) {
-  double padding;
-  const bool ok = parse_space_value(class_name + 2, &padding);
-  if (ok) {
+  } else if (strncmp("pt-", matched_prefix, 3)) {
     style->padding.top = padding;
-  }
-}
-
-void parse_pb(const char *class_name, struct TwxStyle *style) {
-  double padding;
-  const bool ok = parse_space_value(class_name + 2, &padding);
-  if (ok) {
+  } else if (strncmp("pb-", matched_prefix, 3)) {
+    style->padding.bottom = padding;
+  } else if (strncmp("pl-", matched_prefix, 3)) {
+    style->padding.left = padding;
+  } else if (strncmp("pr-", matched_prefix, 3)) {
+    style->padding.right = padding;
+  } else if (strncmp("px-", matched_prefix, 3)) {
+    style->padding.left = padding;
+    style->padding.right = padding;
+  } else if (strncmp("py-", matched_prefix, 3)) {
+    style->padding.top = padding;
     style->padding.bottom = padding;
   }
 }
 
-void parse_pl(const char *class_name, struct TwxStyle *style) {
-  double padding;
-  const bool ok = parse_space_value(class_name + 2, &padding);
-  if (ok) {
-    style->padding.left = padding;
-  }
-}
-
-void parse_pr(const char *class_name, struct TwxStyle *style) {
-  double padding;
-  const bool ok = parse_space_value(class_name + 2, &padding);
-  if (ok) {
-    style->padding.right = padding;
-  }
-}
-
-void parse_m(const char *class_name, struct TwxStyle *style) {
+void parse_margin(const char *class_name, const char *matched_prefix,
+                  struct twx_style *style) {
   double margin;
-  const bool ok = parse_space_value(class_name + 2, &margin);
-  if (ok) {
+  const bool ok =
+      parse_space_value(class_name + strlen(matched_prefix), &margin);
+  if (!ok) {
+    return;
+  }
+
+  if (strncmp("m-", matched_prefix, 2)) {
     style->margin.top = margin;
     style->margin.bottom = margin;
     style->margin.left = margin;
     style->margin.right = margin;
-  }
-}
-
-void parse_mt(const char *class_name, struct TwxStyle *style) {
-  double margin;
-  const bool ok = parse_space_value(class_name + 2, &margin);
-  if (ok) {
+  } else if (strncmp("mt-", matched_prefix, 3)) {
     style->margin.top = margin;
-  }
-}
-
-void parse_mb(const char *class_name, struct TwxStyle *style) {
-  double margin;
-  const bool ok = parse_space_value(class_name + 2, &margin);
-  if (ok) {
+  } else if (strncmp("mb-", matched_prefix, 3)) {
     style->margin.bottom = margin;
-  }
-}
-
-void parse_ml(const char *class_name, struct TwxStyle *style) {
-  double margin;
-  const bool ok = parse_space_value(class_name + 2, &margin);
-  if (ok) {
+  } else if (strncmp("ml-", matched_prefix, 3)) {
     style->margin.left = margin;
-  }
-}
-
-void parse_mr(const char *class_name, struct TwxStyle *style) {
-  double margin;
-  const bool ok = parse_space_value(class_name + 2, &margin);
-  if (ok) {
+  } else if (strncmp("mr-", matched_prefix, 3)) {
     style->margin.right = margin;
+  } else if (strncmp("mx-", matched_prefix, 3)) {
+    style->margin.left = margin;
+    style->margin.right = margin;
+  } else if (strncmp("my-", matched_prefix, 3)) {
+    style->margin.top = margin;
+    style->margin.bottom = margin;
   }
 }

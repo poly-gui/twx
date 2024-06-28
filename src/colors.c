@@ -30,7 +30,7 @@
 
 struct ColorEntry {
   int num;
-  TwxARGB color;
+  twx_argb color;
 };
 
 // credit to mel !!!
@@ -147,7 +147,7 @@ static const struct ColorEntry rose_colors[] = {
     {800, 0xFF9F1239}, {900, 0xFFBB1337}, {950, 0xFF4C0519}};
 
 bool color_by_num(const struct ColorEntry *color_table, const int num,
-                  TwxARGB *color) {
+                  twx_argb *color) {
   if (color == NULL)
     return false;
   for (int i = 0; i < 11; ++i) {
@@ -159,7 +159,7 @@ bool color_by_num(const struct ColorEntry *color_table, const int num,
   return false;
 }
 
-bool get_tw_color(const char *color_name, const int color_num, TwxARGB *color) {
+bool get_tw_color(const char *color_name, const int color_num, twx_argb *color) {
   uint32_t hash = strhash(color_name);
 
   const struct ColorEntry *color_table = NULL;
@@ -234,7 +234,7 @@ bool get_tw_color(const char *color_name, const int color_num, TwxARGB *color) {
   return color_by_num(color_table, color_num, color);
 }
 
-bool parse_color_string(const char *color_str, TwxARGB *color) {
+bool parse_color_string(const char *color_str, twx_argb *color) {
   char *hyphen = strchr(color_str, '-');
   if (hyphen == NULL) {
     return NULL;
@@ -259,6 +259,7 @@ bool parse_color_string(const char *color_str, TwxARGB *color) {
   return get_tw_color(color_name, color_num, color);
 }
 
-void parse_bg(const char *class_name, struct TwxStyle *style) {
+void parse_bg(const char *class_name, const char *matched_prefix,
+              struct twx_style *style) {
   parse_color_string(class_name + 3, &style->background_color);
 }

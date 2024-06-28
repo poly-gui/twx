@@ -1,0 +1,20 @@
+%{
+#include "modifier_table.h"
+%}
+struct twx_modifier { const char *modifier_name; enum twx_modifier_code code; };
+%language=ANSI-C
+%includes
+%readonly-tables
+%define slot-name modifier_name
+%define hash-function-name hash_modifier_str
+%define lookup-function-name find_modifier_code
+%struct-type
+%omit-struct-type
+%%
+dark, TWX_MODIFIER_DARK
+sm, TWX_MODIFIER_SM
+md, TWX_MODIFIER_MD
+lg, TWX_MODIFIER_LG
+xl, TWX_MODIFIER_XL
+2xl, TWX_MODIFIER_XXL
+hover, TWX_MODIFIER_HOVER
