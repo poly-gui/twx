@@ -1,7 +1,6 @@
 #ifndef TWX__STYLEDEF_H
 #define TWX__STYLEDEF_H
 
-#include "modifiers.h"
 #include "uthash.h"
 
 #define TWX_VALUE_NOT_SET -1

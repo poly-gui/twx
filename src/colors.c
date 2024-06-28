@@ -3,6 +3,7 @@
 #include "twx/twx.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
 #define COLOR_NAME_SLATE 274523902
@@ -159,7 +160,8 @@ bool color_by_num(const struct ColorEntry *color_table, const int num,
   return false;
 }
 
-bool get_tw_color(const char *color_name, const int color_num, twx_argb *color) {
+bool get_tw_color(const char *color_name, const int color_num,
+                  twx_argb *color) {
   uint32_t hash = strhash(color_name);
 
   const struct ColorEntry *color_table = NULL;
@@ -246,7 +248,7 @@ bool parse_color_string(const char *color_str, twx_argb *color) {
     return false;
   }
 
-  char *color_num_str = substr(color_str, split_i, strlen(color_str));
+  char *color_num_str = substr(color_str, split_i + 1, strlen(color_str));
   if (color_num_str == NULL) {
     return false;
   }
@@ -261,5 +263,5 @@ bool parse_color_string(const char *color_str, twx_argb *color) {
 
 void parse_bg(const char *class_name, const char *matched_prefix,
               struct twx_style *style) {
-  parse_color_string(class_name + 3, &style->background_color);
+  parse_color_string(class_name + 3, &(style->background_color));
 }

@@ -45,19 +45,19 @@ void parse_border(const char *class_name, const char *matched_prefix,
   const size_t prefix_len = strlen(matched_prefix);
 
   uint8_t sides = 0;
-  if (strncmp("border-", matched_prefix, 7)) {
+  if (strncmp("border-", matched_prefix, 7) == 0) {
     sides = 15;
-  } else if (strncmp("border-t-", matched_prefix, 9)) {
+  } else if (strncmp("border-t-", matched_prefix, 9) == 0) {
     sides = BORDER_TOP;
-  } else if (strncmp("border-l-", matched_prefix, 9)) {
+  } else if (strncmp("border-l-", matched_prefix, 9) == 0) {
     sides = BORDER_LEFT;
-  } else if (strncmp("border-b-", matched_prefix, 9)) {
+  } else if (strncmp("border-b-", matched_prefix, 9) == 0) {
     sides = BORDER_BOTTOM;
-  } else if (strncmp("border-r-", matched_prefix, 9)) {
+  } else if (strncmp("border-r-", matched_prefix, 9) == 0) {
     sides = BORDER_RIGHT;
-  } else if (strncmp("border-x-", matched_prefix, 9)) {
+  } else if (strncmp("border-x-", matched_prefix, 9) == 0) {
     sides = BORDER_LEFT | BORDER_RIGHT;
-  } else if (strncmp("border-y-", matched_prefix, 9)) {
+  } else if (strncmp("border-y-", matched_prefix, 9) == 0) {
     sides = BORDER_TOP | BORDER_BOTTOM;
   }
   if (sides == 0) {

@@ -7,16 +7,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#define JSON_VALUE_OR_NULL(type, value)                                        \
+  value != TWX_VALUE_NOT_SET ? json_object_new_##type(value) : NULL
+
 void twx_argb_to_hex_str(twx_argb argb, char *str) {
   uint32_t value = argb & 0xFFFFFFFF;
   sprintf(str, "#%X", value);
 }
 
-/**
- * Converts the given set of tailwind modifier codes into a string.
- * For example, given TWX_MODIFIER_DARK | TWX_MODIFIER_SM, this produces:
- * "dark:sm"
- */
 void twx_modifier_to_str(uint64_t modifiers, char *str) {
   sprintf(str, "%llU", modifiers);
 }
@@ -26,28 +24,33 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
     return;
   }
 
-  char bg_color_str[10];
-  twx_argb_to_hex_str(style->background_color, bg_color_str);
-  json_object_object_add(json, "backgroundColor",
-                         json_object_new_string(bg_color_str));
+  if (style->background_color >= 0) {
+
+    char bg_color_str[10];
+    twx_argb_to_hex_str(style->background_color, bg_color_str);
+    json_object_object_add(json, "backgroundColor",
+                           json_object_new_string(bg_color_str));
+  } else {
+    json_object_object_add(json, "backgroundColor", NULL);
+  }
 
   json_object_object_add(json, "paddingTop",
-                         json_object_new_double(style->padding.top));
+                         JSON_VALUE_OR_NULL(double, style->padding.top));
   json_object_object_add(json, "paddingLeft",
-                         json_object_new_double(style->padding.left));
+                         JSON_VALUE_OR_NULL(double, style->padding.left));
   json_object_object_add(json, "paddingBottom",
-                         json_object_new_double(style->padding.bottom));
+                         JSON_VALUE_OR_NULL(double, style->padding.bottom));
   json_object_object_add(json, "paddingRight",
-                         json_object_new_double(style->padding.right));
+                         JSON_VALUE_OR_NULL(double, style->padding.right));
 
   json_object_object_add(json, "marginTop",
-                         json_object_new_double(style->margin.top));
+                         JSON_VALUE_OR_NULL(double, style->margin.top));
   json_object_object_add(json, "marginLeft",
-                         json_object_new_double(style->margin.left));
+                         JSON_VALUE_OR_NULL(double, style->margin.left));
   json_object_object_add(json, "marginBottom",
-                         json_object_new_double(style->margin.bottom));
+                         JSON_VALUE_OR_NULL(double, style->margin.bottom));
   json_object_object_add(json, "marginRight",
-                         json_object_new_double(style->margin.right));
+                         JSON_VALUE_OR_NULL(double, style->margin.right));
 }
 
 const char *styles_to_json(const struct twx_style *base_style,
@@ -87,7 +90,8 @@ const char *styles_to_json(const struct twx_style *base_style,
 
   // the returned string will be freed by json_object_put later
   // so we need to make a copy here
-  const char *json_str = json_object_to_json_string(root);
+  const char *json_str =
+      json_object_to_json_string_ext(root, JSON_C_TO_STRING_PRETTY);
   const size_t len = strlen(json_str) + 1;
   char *output = (char *)malloc(sizeof(char) * len);
   if (output == NULL) {

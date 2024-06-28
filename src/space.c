@@ -1,6 +1,6 @@
 #include "space.h"
-#include "twx/twx.h"
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -32,7 +32,7 @@ bool parse_space_value(const char *space_value_str, double *space) {
 
   char *end;
   const double value = strtod(space_value_str, &end);
-  if ((end - space_value_str + 1) != len) {
+  if ((end - space_value_str) != len) {
     return false;
   }
 
@@ -54,23 +54,23 @@ void parse_padding(const char *class_name, const char *matched_prefix,
     return;
   }
 
-  if (strncmp("p-", matched_prefix, 2)) {
+  if (strncmp("p-", matched_prefix, 2) == 0) {
     style->padding.top = padding;
     style->padding.bottom = padding;
     style->padding.left = padding;
     style->padding.right = padding;
-  } else if (strncmp("pt-", matched_prefix, 3)) {
+  } else if (strncmp("pt-", matched_prefix, 3) == 0) {
     style->padding.top = padding;
-  } else if (strncmp("pb-", matched_prefix, 3)) {
+  } else if (strncmp("pb-", matched_prefix, 3) == 0) {
     style->padding.bottom = padding;
-  } else if (strncmp("pl-", matched_prefix, 3)) {
+  } else if (strncmp("pl-", matched_prefix, 3) == 0) {
     style->padding.left = padding;
-  } else if (strncmp("pr-", matched_prefix, 3)) {
+  } else if (strncmp("pr-", matched_prefix, 3) == 0) {
     style->padding.right = padding;
-  } else if (strncmp("px-", matched_prefix, 3)) {
+  } else if (strncmp("px-", matched_prefix, 3) == 0) {
     style->padding.left = padding;
     style->padding.right = padding;
-  } else if (strncmp("py-", matched_prefix, 3)) {
+  } else if (strncmp("py-", matched_prefix, 3) == 0) {
     style->padding.top = padding;
     style->padding.bottom = padding;
   }

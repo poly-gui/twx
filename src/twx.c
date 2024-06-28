@@ -6,8 +6,8 @@
 #include "styledef.h"
 #include "to_json.h"
 #include "uthash.h"
-#include <hashmap.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -63,13 +63,15 @@ const char *twx_parse_to_json(char *class_str) {
 
   char *class = strsep(&class_str, delim);
   while (class != NULL) {
-    const uint64_t modifiers = extract_modifiers(class);
+    const uint64_t modifiers = extract_and_strip_modifiers(&class);
     if (modifiers == TWX_NO_MODIFIER) {
       parse_class(class, &base_style);
     } else {
       struct twx_style_with_modifier *style_with_modifier =
           (struct twx_style_with_modifier *)malloc(
               sizeof(struct twx_style_with_modifier));
+
+      style_with_modifier->modifiers = modifiers;
 
       twx_style_initialize(&style_with_modifier->style);
       parse_class(class, &style_with_modifier->style);

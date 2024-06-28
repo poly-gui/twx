@@ -34,6 +34,6 @@ struct twx_modifier {
  * Instead, storing the modifiers in an integer sorts them automatically based
  * on their assigned code.
  */
-uint64_t extract_modifiers(char *class_name);
+uint64_t extract_and_strip_modifiers(char **class_name);
 
 #endif
