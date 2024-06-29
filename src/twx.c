@@ -51,21 +51,26 @@ void parse_class(char *class, struct twx_style *style) {
   }
 }
 
-const char *twx_parse_to_json(char *class_str) {
+char *twx_parse_to_json(const char *class_str) {
   if (class_str == NULL) {
     return NULL;
   }
+
+  const size_t class_str_len = strlen(class_str);
+  char *class_str_cpy = (char *)malloc((class_str_len + 1) * sizeof(char));
+  if (class_str_cpy == NULL) {
+    return NULL;
+  }
+  strcpy(class_str_cpy, class_str);
 
   const char *delim = " ";
 
   struct twx_style base_style;
   twx_style_initialize(&base_style);
 
-  printf("after initialize border top %f\n", base_style.border.top.width);
-
   struct twx_style_with_modifier *modifier_styles = NULL;
 
-  char *class = strsep(&class_str, delim);
+  char *class = strsep(&class_str_cpy, delim);
   while (class != NULL) {
     const uint64_t modifiers = extract_and_strip_modifiers(&class);
     if (modifiers == TWX_NO_MODIFIER) {
@@ -73,24 +78,31 @@ const char *twx_parse_to_json(char *class_str) {
     } else {
       struct twx_style_with_modifier *style_with_modifier;
 
+      // find if there is an existing style object for this combination of
+      // variants if not, create one
       HASH_FIND_INT(modifier_styles, &modifiers, style_with_modifier);
       if (style_with_modifier == NULL) {
         style_with_modifier = (struct twx_style_with_modifier *)malloc(
             sizeof(struct twx_style_with_modifier));
+        if (style_with_modifier == NULL) {
+          return NULL;
+        }
+
+        HASH_ADD_INT(modifier_styles, modifiers, style_with_modifier);
       }
 
       style_with_modifier->modifiers = modifiers;
 
       twx_style_initialize(&style_with_modifier->style);
       parse_class(class, &style_with_modifier->style);
-
-      HASH_ADD_INT(modifier_styles, modifiers, style_with_modifier);
     }
 
-    class = strsep(&class_str, delim);
+    class = strsep(&class_str_cpy, delim);
   }
 
-  const char *json = styles_to_json(&base_style, modifier_styles);
+  char *json = styles_to_json(&base_style, modifier_styles);
+
+  free(class_str_cpy);
 
   return json;
 }

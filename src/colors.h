@@ -2,6 +2,7 @@
 #define TWX__COLORS_H
 
 #include "styledef.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 bool get_tw_color(const char *color_name, const int color_num, twx_argb *color);

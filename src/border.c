@@ -2,7 +2,6 @@
 #include "colors.h"
 #include "space.h"
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
 #define BORDER_TOP 1
@@ -49,7 +48,6 @@ void parse_border(const char *class_name, const char *matched_prefix,
   uint8_t sides = 0;
   if (strncmp("border-", matched_prefix, 7) == 0) {
     sides = BORDER_ALL;
-    printf("sides %u\n", sides);
   } else if (strncmp("border-t-", matched_prefix, 9) == 0) {
     sides = BORDER_TOP;
   } else if (strncmp("border-l-", matched_prefix, 9) == 0) {

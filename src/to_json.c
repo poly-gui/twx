@@ -108,8 +108,8 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
   }
 }
 
-const char *styles_to_json(const struct twx_style *base_style,
-                           struct twx_style_with_modifier *modifier_styles) {
+char *styles_to_json(const struct twx_style *base_style,
+                     struct twx_style_with_modifier *modifier_styles) {
   if (base_style == NULL || modifier_styles == NULL) {
     return NULL;
   }

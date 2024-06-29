@@ -5,6 +5,7 @@
 
 #define TWX_VALUE_NOT_SET -1
 
+#include <stdbool.h>
 #include <stdint.h>
 
 typedef int64_t twx_argb;
