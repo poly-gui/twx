@@ -32,6 +32,16 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PRIVATE json-c)
 
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+add_custom_target(combined ALL
+	COMMAND ${CMAKE_AR} -x $<TARGET_FILE:${PROJECT_NAME}>
+	COMMAND ${CMAKE_AR} -x $<TARGET_LINKER_FILE:json-c-static>
+	COMMAND ${CMAKE_AR} -qcs libtwx.a *.o
+	COMMAND rm -r ${CMAKE_BINARY_DIR}/*.o
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	DEPENDS twx json-c-static)
+
 if (BUILD_TESTING)
 	add_subdirectory(vendor/unity unity)
 
