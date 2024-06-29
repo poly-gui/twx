@@ -12,7 +12,6 @@
 #define BORDER_ALL 15
 
 void apply_border_width(uint8_t sides, double width, struct twx_style *style) {
-  printf("asdkljjsdaklkds %d\n", sides & BORDER_LEFT);
   if ((sides & BORDER_TOP) == 1) {
     style->border.top.width = width;
   }

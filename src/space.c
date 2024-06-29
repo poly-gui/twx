@@ -1,4 +1,5 @@
 #include "space.h"
+#include "styledef.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,24 +86,66 @@ void parse_margin(const char *class_name, const char *matched_prefix,
     return;
   }
 
-  if (strncmp("m-", matched_prefix, 2)) {
+  if (strncmp("m-", matched_prefix, 2) == 0) {
     style->margin.top = margin;
     style->margin.bottom = margin;
     style->margin.left = margin;
     style->margin.right = margin;
-  } else if (strncmp("mt-", matched_prefix, 3)) {
+  } else if (strncmp("mt-", matched_prefix, 3) == 0) {
     style->margin.top = margin;
-  } else if (strncmp("mb-", matched_prefix, 3)) {
+  } else if (strncmp("mb-", matched_prefix, 3) == 0) {
     style->margin.bottom = margin;
-  } else if (strncmp("ml-", matched_prefix, 3)) {
+  } else if (strncmp("ml-", matched_prefix, 3) == 0) {
     style->margin.left = margin;
-  } else if (strncmp("mr-", matched_prefix, 3)) {
+  } else if (strncmp("mr-", matched_prefix, 3) == 0) {
     style->margin.right = margin;
-  } else if (strncmp("mx-", matched_prefix, 3)) {
+  } else if (strncmp("mx-", matched_prefix, 3) == 0) {
     style->margin.left = margin;
     style->margin.right = margin;
-  } else if (strncmp("my-", matched_prefix, 3)) {
+  } else if (strncmp("my-", matched_prefix, 3) == 0) {
     style->margin.top = margin;
     style->margin.bottom = margin;
+  }
+}
+
+void parse_width(const char *class_name, const char *matched_prefix,
+                 struct twx_style *style) {
+  const char *token = class_name + strlen(matched_prefix);
+
+  double width;
+  const bool ok = parse_space_value(token, &width);
+  if (ok) {
+    style->width.is_set = true;
+    style->width.is_fixed = true;
+    style->width.value.fixed_value = width;
+    return;
+  }
+
+  enum twx_dimension_variant variant = twx_dimension_variant_from_str(token);
+  if (variant >= 0) {
+    style->width.is_set = true;
+    style->width.is_fixed = false;
+    style->width.value.variant = variant;
+  }
+}
+
+void parse_height(const char *class_name, const char *matched_prefix,
+                  struct twx_style *style) {
+  const char *token = class_name + strlen(matched_prefix);
+
+  double height;
+  const bool ok = parse_space_value(token, &height);
+  if (ok) {
+    style->height.is_set = true;
+    style->height.is_fixed = true;
+    style->height.value.fixed_value = height;
+    return;
+  }
+
+  enum twx_dimension_variant variant = twx_dimension_variant_from_str(token);
+  if (variant >= 0) {
+    style->height.is_set = true;
+    style->height.is_fixed = false;
+    style->height.value.variant = variant;
   }
 }

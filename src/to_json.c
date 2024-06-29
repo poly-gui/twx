@@ -33,6 +33,33 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
     return;
   }
 
+  if (style->width.is_set) {
+    if (style->width.is_fixed) {
+      json_object_object_add(
+          json, "width",
+          json_object_new_double(style->width.value.fixed_value));
+    } else {
+      const char *name =
+          twx_dimension_variant_to_str(style->width.value.variant);
+      if (name != NULL) {
+        json_object_object_add(json, "width", json_object_new_string(name));
+      }
+    }
+  }
+  if (style->height.is_set) {
+    if (style->height.is_fixed) {
+      json_object_object_add(
+          json, "height",
+          json_object_new_double(style->height.value.fixed_value));
+    } else {
+      const char *name =
+          twx_dimension_variant_to_str(style->height.value.variant);
+      if (name != NULL) {
+        json_object_object_add(json, "height", json_object_new_string(name));
+      }
+    }
+  }
+
   ADD_COLOR_VALUE_IF_SET(json, "backgroundColor", style->background_color);
 
   ADD_KEY_IF_VALUE_SET(json, double, "paddingTop", style->padding.top);

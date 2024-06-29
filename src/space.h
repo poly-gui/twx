@@ -14,4 +14,10 @@ void parse_padding(const char *class_name, const char *matched_prefix,
 void parse_margin(const char *class_name, const char *matched_prefix,
                   struct twx_style *style);
 
+void parse_width(const char *class_name, const char *matched_prefix,
+                 struct twx_style *style);
+
+void parse_height(const char *class_name, const char *matched_prefix,
+                  struct twx_style *style);
+
 #endif

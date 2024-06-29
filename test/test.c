@@ -8,7 +8,7 @@ void tearDown(void) {}
 
 void test_twx_parse_to_json() {
   char test_class_names[] =
-      "bg-red-500 border-2 p-2 dark:bg-neutral-950 dark:p-4 lg:dark:p-12";
+      "bg-red-500 border-2 p-2 w-2 dark:bg-neutral-950 dark:p-4 lg:dark:p-12";
   printf("parsing: %s\n", test_class_names);
   const char *json = twx_parse_to_json(test_class_names);
   printf("%s\n", json);

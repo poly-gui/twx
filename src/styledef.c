@@ -1,6 +1,9 @@
 #include "styledef.h"
 
 void twx_style_initialize(struct twx_style *style) {
+  style->width.is_set = false;
+  style->width.is_set = false;
+
   style->background_color = TWX_VALUE_NOT_SET;
 
   style->padding.top = TWX_VALUE_NOT_SET;
@@ -21,4 +24,29 @@ void twx_style_initialize(struct twx_style *style) {
   style->border.left.color = TWX_VALUE_NOT_SET;
   style->border.bottom.color = TWX_VALUE_NOT_SET;
   style->border.right.color = TWX_VALUE_NOT_SET;
+}
+
+enum twx_dimension_variant twx_dimension_variant_from_str(const char *str) {
+  if (strncmp("full", str, 4) == 0) {
+    return TWX_DIMENSION_FULL;
+  }
+
+  if (strncmp("auto", str, 4) == 0) {
+    return TWX_DIMENSION_AUTO;
+  }
+
+  return -1;
+}
+
+const char *twx_dimension_variant_to_str(enum twx_dimension_variant variant) {
+  switch (variant) {
+  case TWX_DIMENSION_AUTO:
+    return "auto";
+
+  case TWX_DIMENSION_FULL:
+    return "full";
+
+  default:
+    return NULL;
+  }
 }

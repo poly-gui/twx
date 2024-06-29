@@ -13,7 +13,7 @@
 #include <time.h>
 #include <twx/twx.h>
 
-#define PARSER_FUNC_COUNT 16
+#define PARSER_FUNC_COUNT 18
 
 typedef void (*ClassParserFunc)(const char *class_name,
                                 const char *matched_prefix,
@@ -26,6 +26,8 @@ struct ClassParser {
 
 static const struct ClassParser parsers[PARSER_FUNC_COUNT] = {
     {"bg-", &parse_bg},
+
+    {"w-", &parse_width},         {"h-", &parse_height},
 
     {"p-", &parse_padding},       {"pt-", &parse_padding},
     {"pb-", &parse_padding},      {"pr-", &parse_padding},
@@ -69,9 +71,13 @@ const char *twx_parse_to_json(char *class_str) {
     if (modifiers == TWX_NO_MODIFIER) {
       parse_class(class, &base_style);
     } else {
-      struct twx_style_with_modifier *style_with_modifier =
-          (struct twx_style_with_modifier *)malloc(
-              sizeof(struct twx_style_with_modifier));
+      struct twx_style_with_modifier *style_with_modifier;
+
+      HASH_FIND_INT(modifier_styles, &modifiers, style_with_modifier);
+      if (style_with_modifier == NULL) {
+        style_with_modifier = (struct twx_style_with_modifier *)malloc(
+            sizeof(struct twx_style_with_modifier));
+      }
 
       style_with_modifier->modifiers = modifiers;
 

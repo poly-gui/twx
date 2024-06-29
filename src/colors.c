@@ -258,7 +258,12 @@ bool parse_color_string(const char *color_str, twx_argb *color) {
     return 0;
   }
 
-  return get_tw_color(color_name, color_num, color);
+  const bool ok = get_tw_color(color_name, color_num, color);
+
+  free(color_num_str);
+  free(color_name);
+
+  return ok;
 }
 
 void parse_bg(const char *class_name, const char *matched_prefix,
