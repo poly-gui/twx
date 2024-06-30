@@ -110,7 +110,7 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
 
 char *styles_to_json(const struct twx_style *base_style,
                      struct twx_style_with_modifier *modifier_styles) {
-  if (base_style == NULL || modifier_styles == NULL) {
+  if (base_style == NULL) {
     return NULL;
   }
 
@@ -127,20 +127,22 @@ char *styles_to_json(const struct twx_style *base_style,
   twx_style_to_json(base_style, base_style_json);
   json_object_object_add(root, "0", base_style_json);
 
-  struct twx_style_with_modifier *modifier_style, *tmp;
-  HASH_ITER(hh, modifier_styles, modifier_style, tmp) {
-    json_object *style_json = json_object_new_object();
-    if (style_json == NULL) {
-      return NULL;
+  if (modifier_styles != NULL) {
+    struct twx_style_with_modifier *modifier_style, *tmp;
+    HASH_ITER(hh, modifier_styles, modifier_style, tmp) {
+      json_object *style_json = json_object_new_object();
+      if (style_json == NULL) {
+        return NULL;
+      }
+
+      twx_style_to_json(&modifier_style->style, style_json);
+
+      char modifier_str[32];
+      twx_modifier_to_str(modifier_style->modifiers, modifier_str);
+      json_object_object_add(root, modifier_str, style_json);
+
+      free(modifier_style);
     }
-
-    twx_style_to_json(&modifier_style->style, style_json);
-
-    char modifier_str[32];
-    twx_modifier_to_str(modifier_style->modifiers, modifier_str);
-    json_object_object_add(root, modifier_str, style_json);
-
-    free(modifier_style);
   }
 
   // the returned string will be freed by json_object_put later
