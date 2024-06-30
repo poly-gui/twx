@@ -9,9 +9,7 @@
 
 #define ADD_COLOR_VALUE_IF_SET(json, key, value)                               \
   if (value >= 0) {                                                            \
-    char str[10];                                                              \
-    twx_argb_to_hex_str(value, str);                                           \
-    json_object_object_add(json, key, json_object_new_string(str));            \
+    json_object_object_add(json, key, json_object_new_uint64(value));          \
   }
 
 #define ADD_KEY_IF_VALUE_SET(json, type, key, value)                           \
