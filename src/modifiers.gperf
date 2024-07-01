@@ -1,5 +1,6 @@
 %{
 #include "modifier_table.h"
+#include <twx/twx.h>
 %}
 struct twx_modifier { const char *modifier_name; enum twx_modifier_code code; };
 %language=ANSI-C

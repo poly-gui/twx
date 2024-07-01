@@ -32,6 +32,7 @@
 #line 1 "modifiers.gperf"
 
 #include "modifier_table.h"
+#include <twx/twx.h>
 #include <string.h>
 
 #define TOTAL_KEYWORDS 7
@@ -89,20 +90,20 @@ find_modifier_code (register const char *str, register unsigned int len)
   static const struct twx_modifier wordlist[] =
     {
       {""}, {""},
-#line 18 "modifiers.gperf"
-      {"xl", TWX_MODIFIER_XL},
 #line 19 "modifiers.gperf"
-      {"2xl", TWX_MODIFIER_XXL},
-#line 16 "modifiers.gperf"
-      {"md", TWX_MODIFIER_MD},
+      {"xl", TWX_MODIFIER_XL},
 #line 20 "modifiers.gperf"
+      {"2xl", TWX_MODIFIER_XXL},
+#line 17 "modifiers.gperf"
+      {"md", TWX_MODIFIER_MD},
+#line 21 "modifiers.gperf"
       {"hover", TWX_MODIFIER_HOVER},
-#line 14 "modifiers.gperf"
-      {"dark", TWX_MODIFIER_DARK},
 #line 15 "modifiers.gperf"
+      {"dark", TWX_MODIFIER_DARK},
+#line 16 "modifiers.gperf"
       {"sm", TWX_MODIFIER_SM},
       {""},
-#line 17 "modifiers.gperf"
+#line 18 "modifiers.gperf"
       {"lg", TWX_MODIFIER_LG}
     };
 
