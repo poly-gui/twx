@@ -5,9 +5,13 @@
 #include <string.h>
 #include <strings.h>
 
-uint64_t extract_and_strip_modifiers(char **class_name) {
+struct twx_modifier_set extract_and_strip_modifiers(char **class_name) {
+  struct twx_modifier_set modifier_set;
+  modifier_set.modifier_count = 0;
+  modifier_set.modifiers = 0;
+
   if (class_name == NULL) {
-    return 0;
+    return modifier_set;
   }
 
   const char *delim = ":";
@@ -16,7 +20,7 @@ uint64_t extract_and_strip_modifiers(char **class_name) {
   uint64_t modifiers = 0;
 
   if (class_name == NULL) {
-    return 0;
+    return modifier_set;
   }
 
   while (modifier_str != NULL && *class_name != NULL) {
@@ -26,11 +30,12 @@ uint64_t extract_and_strip_modifiers(char **class_name) {
       continue;
     }
 
-    modifiers |= modifier->code;
+    modifier_set.modifier_count++;
+    modifier_set.modifiers |= modifier->code;
     modifier_str = strsep(class_name, delim);
   }
 
   *class_name = modifier_str;
 
-  return modifiers;
+  return modifier_set;
 }

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #define ADD_COLOR_VALUE_IF_SET(json, key, value)                               \
   if (value >= 0) {                                                            \
@@ -136,7 +137,7 @@ char *styles_to_json(const struct twx_style *base_style,
       twx_style_to_json(&modifier_style->style, style_json);
 
       char modifier_str[32];
-      twx_modifier_to_str(modifier_style->modifiers, modifier_str);
+      twx_modifier_to_str(modifier_style->modifier_set.modifiers, modifier_str);
       json_object_object_add(root, modifier_str, style_json);
 
       free(modifier_style);

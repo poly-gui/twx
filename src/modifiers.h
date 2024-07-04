@@ -11,6 +11,11 @@ struct twx_modifier {
   enum twx_modifier_code code;
 };
 
+struct twx_modifier_set {
+  int modifier_count;
+  uint64_t modifiers;
+};
+
 /**
  * Extracts all tailwind modifiers in the received class name
  * and returns an integer which is a union of all the numbers representing the
@@ -21,6 +26,6 @@ struct twx_modifier {
  * Instead, storing the modifiers in an integer sorts them automatically based
  * on their assigned code.
  */
-uint64_t extract_and_strip_modifiers(char **class_name);
+struct twx_modifier_set extract_and_strip_modifiers(char **class_name);
 
 #endif

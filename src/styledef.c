@@ -26,6 +26,11 @@ void twx_style_initialize(struct twx_style *style) {
   style->border.right.color = TWX_VALUE_NOT_SET;
 }
 
+int compare_twx_style_with_modifier(void *a, void *b) {
+  return ((struct twx_style_with_modifier *)a)->modifier_set.modifier_count -
+         ((struct twx_style_with_modifier *)b)->modifier_set.modifier_count;
+}
+
 enum twx_dimension_variant twx_dimension_variant_from_str(const char *str) {
   if (strncmp("full", str, 4) == 0) {
     return TWX_DIMENSION_FULL;

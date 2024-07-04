@@ -1,6 +1,7 @@
 #ifndef TWX__STYLEDEF_H
 #define TWX__STYLEDEF_H
 
+#include "modifiers.h"
 #include "uthash.h"
 
 #define TWX_VALUE_NOT_SET -1
@@ -51,12 +52,14 @@ struct twx_style {
 };
 
 struct twx_style_with_modifier {
-  uint64_t modifiers;
+  struct twx_modifier_set modifier_set;
   struct twx_style style;
   UT_hash_handle hh;
 };
 
 void twx_style_initialize(struct twx_style *style);
+
+int compare_twx_style_with_modifier(void *a, void *b);
 
 enum twx_dimension_variant twx_dimension_variant_from_str(const char *str);
 const char *twx_dimension_variant_to_str(enum twx_dimension_variant variant);

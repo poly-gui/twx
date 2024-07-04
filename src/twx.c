@@ -72,15 +72,18 @@ char *twx_parse_to_json(const char *class_str) {
 
   char *class = strsep(&class_str_cpy, delim);
   while (class != NULL) {
-    const uint64_t modifiers = extract_and_strip_modifiers(&class);
-    if (modifiers == TWX_NO_MODIFIER) {
+    const struct twx_modifier_set modifier_set =
+        extract_and_strip_modifiers(&class);
+
+    if (modifier_set.modifier_count == 0) {
       parse_class(class, &base_style);
     } else {
       struct twx_style_with_modifier *style_with_modifier;
 
       // find if there is an existing style object for this combination of
       // variants if not, create one
-      HASH_FIND_INT(modifier_styles, &modifiers, style_with_modifier);
+      HASH_FIND_INT(modifier_styles, &modifier_set.modifiers,
+                    style_with_modifier);
       if (style_with_modifier == NULL) {
         style_with_modifier = (struct twx_style_with_modifier *)malloc(
             sizeof(struct twx_style_with_modifier));
@@ -88,10 +91,11 @@ char *twx_parse_to_json(const char *class_str) {
           return NULL;
         }
 
-        HASH_ADD_INT(modifier_styles, modifiers, style_with_modifier);
+        HASH_ADD_INT(modifier_styles, modifier_set.modifiers,
+                     style_with_modifier);
       }
 
-      style_with_modifier->modifiers = modifiers;
+      style_with_modifier->modifier_set = modifier_set;
 
       twx_style_initialize(&style_with_modifier->style);
       parse_class(class, &style_with_modifier->style);
@@ -99,6 +103,8 @@ char *twx_parse_to_json(const char *class_str) {
 
     class = strsep(&class_str_cpy, delim);
   }
+
+  HASH_SORT(modifier_styles, compare_twx_style_with_modifier);
 
   char *json = styles_to_json(&base_style, modifier_styles);
 
