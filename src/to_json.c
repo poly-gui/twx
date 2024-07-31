@@ -65,11 +65,18 @@ void twx_style_to_json(const struct twx_style *style, json_object *json) {
   ADD_KEY_IF_VALUE_SET(json, double, "paddingLeft", style->padding.left);
   ADD_KEY_IF_VALUE_SET(json, double, "paddingBottom", style->padding.bottom);
   ADD_KEY_IF_VALUE_SET(json, double, "paddingRight", style->padding.right);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingHorizontal",
+                       style->padding.horizontal);
+  ADD_KEY_IF_VALUE_SET(json, double, "paddingVertical",
+                       style->padding.vertical);
 
   ADD_KEY_IF_VALUE_SET(json, double, "marginTop", style->margin.top);
   ADD_KEY_IF_VALUE_SET(json, double, "marginLeft", style->margin.left);
   ADD_KEY_IF_VALUE_SET(json, double, "marginBottom", style->margin.bottom);
   ADD_KEY_IF_VALUE_SET(json, double, "marginRight", style->margin.right);
+  ADD_KEY_IF_VALUE_SET(json, double, "marginHorizontal",
+                       style->margin.horizontal);
+  ADD_KEY_IF_VALUE_SET(json, double, "marginVertical", style->margin.vertical);
 
   if (style->border.top.width != TWX_VALUE_NOT_SET) {
     json_object *border_obj = json_object_new_object();

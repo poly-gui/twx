@@ -16,6 +16,8 @@ struct twx_space {
   double right;
   double bottom;
   double left;
+  double horizontal;
+  double vertical;
 };
 
 struct twx_border {

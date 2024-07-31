@@ -10,11 +10,15 @@ void twx_style_initialize(struct twx_style *style) {
   style->padding.left = TWX_VALUE_NOT_SET;
   style->padding.bottom = TWX_VALUE_NOT_SET;
   style->padding.right = TWX_VALUE_NOT_SET;
+  style->padding.horizontal = TWX_VALUE_NOT_SET;
+  style->padding.vertical = TWX_VALUE_NOT_SET;
 
   style->margin.top = TWX_VALUE_NOT_SET;
   style->margin.left = TWX_VALUE_NOT_SET;
   style->margin.bottom = TWX_VALUE_NOT_SET;
   style->margin.right = TWX_VALUE_NOT_SET;
+  style->margin.horizontal = TWX_VALUE_NOT_SET;
+  style->margin.vertical = TWX_VALUE_NOT_SET;
 
   style->border.top.width = TWX_VALUE_NOT_SET;
   style->border.left.width = TWX_VALUE_NOT_SET;

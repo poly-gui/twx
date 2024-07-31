@@ -71,9 +71,11 @@ void parse_padding(const char *class_name, const char *matched_prefix,
   } else if (strncmp("px-", matched_prefix, 3) == 0) {
     style->padding.left = padding;
     style->padding.right = padding;
+    style->padding.horizontal = padding;
   } else if (strncmp("py-", matched_prefix, 3) == 0) {
     style->padding.top = padding;
     style->padding.bottom = padding;
+    style->padding.vertical = padding;
   }
 }
 
@@ -102,9 +104,11 @@ void parse_margin(const char *class_name, const char *matched_prefix,
   } else if (strncmp("mx-", matched_prefix, 3) == 0) {
     style->margin.left = margin;
     style->margin.right = margin;
+    style->margin.horizontal = margin;
   } else if (strncmp("my-", matched_prefix, 3) == 0) {
     style->margin.top = margin;
     style->margin.bottom = margin;
+    style->margin.vertical = margin;
   }
 }
 
